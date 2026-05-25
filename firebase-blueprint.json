@@ -1,0 +1,109 @@
+{
+  "entities": {
+    "Comment": {
+      "title": "Comment",
+      "description": "Family members reaction comment on individual travel photos",
+      "type": "object",
+      "properties": {
+        "photoId": {
+          "type": "string",
+          "description": "The unique reference string of the photo"
+        },
+        "userId": {
+          "type": "string",
+          "description": "User identifier of the author"
+        },
+        "userName": {
+          "type": "string",
+          "description": "Display name of the author"
+        },
+        "userPhoto": {
+          "type": "string",
+          "description": "Profile picture of the author"
+        },
+        "text": {
+          "type": "string",
+          "description": "The custom comment textual body"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when this comment was created"
+        }
+      },
+      "required": ["photoId", "userId", "userName", "text", "createdAt"]
+    },
+    "Like": {
+      "title": "Like",
+      "description": "User or guest likes on individual travel photos",
+      "type": "object",
+      "properties": {
+        "photoId": {
+          "type": "string",
+          "description": "The photo ID being liked"
+        },
+        "userId": {
+          "type": "string",
+          "description": "User ID or unique client-side guest ID"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the like was generated"
+        }
+      },
+      "required": ["photoId", "userId", "createdAt"]
+    },
+    "CustomAlbum": {
+      "title": "CustomAlbum",
+      "description": "Synced Google Photos or user custom uploaded travel albums",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "year": { "type": "number" },
+        "coverUrl": { "type": "string" },
+        "photosCount": { "type": "number" },
+        "description": { "type": "string" },
+        "photos": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "year", "coverUrl", "photosCount", "description", "photos", "createdAt"]
+    },
+    "WebsiteSettings": {
+      "title": "WebsiteSettings",
+      "description": "Dynamic branding and layout configuration for the homepage",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "heroSlides": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "lastUpdated": { "type": "string" }
+      },
+      "required": ["title", "subtitle"]
+    }
+  },
+  "firestore": {
+    "/comments/{commentId}": {
+      "schema": "Comment",
+      "description": "Comments left on family travel photographs"
+    },
+    "/likes/{likeId}": {
+      "schema": "Like",
+      "description": "User and guest likes on travel photos"
+    },
+    "/customAlbums/{albumId}": {
+      "schema": "CustomAlbum",
+      "description": "Shared custom travel albums stored in Firestore"
+    },
+    "/settings/{settingId}": {
+      "schema": "WebsiteSettings",
+      "description": "Global website configurations"
+    }
+  }
+}

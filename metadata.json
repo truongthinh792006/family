@@ -1,0 +1,6 @@
+{
+  "name": "Cinematic Family Travel Photo Website",
+  "description": "A minimal, cinematic website for family travel photos featuring a fullscreen hero slideshow, travel geographic destination cards, Google Photos album integration, and a glassmorphic lightbox masonry gallery.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

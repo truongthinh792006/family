@@ -1,0 +1,156 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Custom scrollbar and ambient styles for the cinematic photo website */
+html {
+  scroll-behavior: smooth;
+  background-color: #030303;
+  color: #f5f5f7;
+}
+
+::selection {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+/* Glassmorphism utility classes */
+.glass-panel {
+  background: rgba(18, 18, 18, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-light {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.glass-tabs {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Hide standard scrollbars but allow scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* --- ADVANCED CINEMATIC EFFECTS --- */
+
+/* 1. Infinite Horizontal Marquee Keyframes */
+@keyframes infinite-marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: infinite-marquee 25s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused; /* Pause gently on hover for readability */
+}
+
+/* 2. 7-Color Rainbow Running Light (Hiệu ứng ánh sáng 7 màu) */
+@keyframes rainbow-running-light {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Glow ring element */
+.rainbow-glow-ring {
+  position: relative;
+  z-index: 10;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.rainbow-glow-inner {
+  position: relative;
+  z-index: 10;
+  background-color: #030303;
+  border-radius: 14px;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+/* Decorative running gradient container wrapper */
+.rainbow-glow-wrapper {
+  position: relative;
+  padding: 2.5px; /* Border thickness */
+  background: linear-gradient(
+    270deg,
+    #ff0055,
+    #ff9900,
+    #33ff00,
+    #00ffff,
+    #0022ff,
+    #9900ff,
+    #ff0055
+  );
+  background-size: 300% 300%;
+  animation: rainbow-running-light 6s linear infinite;
+  transition: filter 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Glow pulse underlay */
+.rainbow-glow-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: inherit;
+  filter: blur(12px);
+  opacity: 0.15;
+  z-index: -1;
+  transition: opacity 0.4s ease, filter 0.4s ease;
+}
+
+/* Interactive cursor hover state */
+.rainbow-glow-wrapper:hover {
+  transform: translateY(-4px) scale(1.015);
+  animation-duration: 3s; /* Run much faster when hovered to create an exciting light show */
+}
+
+.rainbow-glow-wrapper:hover::after {
+  opacity: 0.85; /* Vibrant glowing halo around the image container */
+  filter: blur(18px);
+}
+
+/* Infinite Shake Keyframes */
+@keyframes shake-key {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+.animate-shake {
+  animation: shake-key 0.2s ease-in-out infinite;
+}
+
