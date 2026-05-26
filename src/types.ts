@@ -10,6 +10,8 @@ export interface Photo {
   location: string;
   year: number;
   description?: string;
+  type?: 'image' | 'video';
+  thumbnailUrl?: string;
 }
 
 export interface Album {

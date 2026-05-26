@@ -81,23 +81,34 @@ export async function fetchAlbumPhotos(accessToken: string, albumId: string): Pr
   const rawItems = data.mediaItems || [];
 
   return rawItems
-    .filter((item: any) => item.mimeType?.startsWith('image/')) // Keep only images
+    .filter((item: any) => item.mimeType?.startsWith('image/') || item.mimeType?.startsWith('video/'))
     .map((item: any) => {
-      // Modify Google Photos baseUrl to load photo gracefully
-      const displayUrl = `${item.baseUrl}=w1200-h800`;
+      const isVideo = item.mimeType?.startsWith('video/');
+      // For videos, use =dv for direct mp4 video stream; use =w1200-h800 as cover/thumbnail Url.
+      const displayUrl = isVideo ? `${item.baseUrl}=dv` : `${item.baseUrl}=w1200-h800`;
+      const thumbnailUrl = isVideo ? `${item.baseUrl}=w1200-h800` : undefined;
+
       return {
         id: item.id,
         url: displayUrl,
-        title: item.filename || 'Google Photo',
+        thumbnailUrl: thumbnailUrl,
+        type: isVideo ? 'video' : 'image',
+        title: item.filename || (isVideo ? 'Google Video' : 'Google Photo'),
         location: 'Google Photos Sync',
         year: item.mediaMetadata?.creationTime 
           ? new Date(item.mediaMetadata.creationTime).getFullYear() 
           : new Date().getFullYear(),
-        description: `Captured on ${
-          item.mediaMetadata?.creationTime 
-            ? new Date(item.mediaMetadata.creationTime).toLocaleDateString()
-            : 'Unknown Date'
-        }`
+        description: isVideo 
+          ? `Video • Ghi hình lúc ${
+              item.mediaMetadata?.creationTime 
+                ? new Date(item.mediaMetadata.creationTime).toLocaleDateString()
+                : 'Không rõ ngày'
+            }`
+          : `Ghi lại lúc ${
+              item.mediaMetadata?.creationTime 
+                ? new Date(item.mediaMetadata.creationTime).toLocaleDateString()
+                : 'Không rõ ngày'
+            }`
       };
     });
 }

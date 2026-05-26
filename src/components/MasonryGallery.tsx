@@ -5,7 +5,7 @@
 
 import { motion } from 'motion/react';
 import { Photo, Album } from '../types';
-import { MapPin, Calendar, Camera, Eye, Edit2 } from 'lucide-react';
+import { MapPin, Calendar, Camera, Eye, Edit2, Play } from 'lucide-react';
 import PhotoLikeButton from './PhotoLikeButton';
 
 interface MasonryGalleryProps {
@@ -93,12 +93,19 @@ export default function MasonryGallery({ album, onPhotoClick, onEditAlbum }: Mas
                       }`}
                     >
                       <img
-                        src={photo.url}
+                        src={photo.thumbnailUrl || photo.url}
                         alt={photo.title}
                         referrerPolicy="no-referrer"
                         className="w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-105"
                         loading="lazy"
                       />
+
+                      {/* Play overlay for video content */}
+                      {photo.type === 'video' && (
+                        <div className="absolute top-3 left-3 z-30 p-2 rounded-full bg-black/70 border border-[#d4af37]/30 text-[#d4af37] flex items-center justify-center backdrop-blur-md shadow-lg transition-transform group-hover:scale-110 pointer-events-none">
+                          <Play className="w-3.5 h-3.5 fill-current" />
+                        </div>
+                      )}
 
                       {/* Hover Overlay Buttons and Details */}
                       <div className="absolute top-3 right-3 z-30 opacity-0 group-hover:opacity-100 transition-opacity duration-300">

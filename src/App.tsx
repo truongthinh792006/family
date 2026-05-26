@@ -501,6 +501,19 @@ export default function App() {
                 <span>CÀI ĐẶT WEB</span>
               </motion.button>
 
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  setIsAdmin(false);
+                  localStorage.removeItem('is_family_admin_unlocked');
+                  setIsWebsiteSettingsOpen(false);
+                }}
+                className="p-2 rounded-full border border-red-500/30 bg-red-500/5 hover:bg-red-500/15 text-red-500 hover:text-red-400 cursor-pointer transition-all shrink-0 flex items-center justify-center"
+                title="Khóa Quyền Admin (Thoát Cấu Hình)"
+              >
+                <Unlock className="w-4 h-4 text-green-400" />
+              </motion.button>
+
               {user ? (
                 <motion.button
                   whileTap={{ scale: 0.95 }}
@@ -753,16 +766,18 @@ export default function App() {
             <button
               onClick={() => {
                 if (isAdmin) {
-                  setIsWebsiteSettingsOpen(true);
+                  setIsAdmin(false);
+                  localStorage.removeItem('is_family_admin_unlocked');
+                  setIsWebsiteSettingsOpen(false);
                 } else {
                   setPasscodePromptOpen(true);
                 }
               }}
               className="hover:text-[#d4af37] transition-all cursor-pointer text-white/40 hover:scale-105 flex items-center gap-1.5 focus:outline-none text-[10px] uppercase font-mono tracking-widest border-l border-white/10 pl-3.5"
-              title={isAdmin ? "Mở bảng Cài đặt Web" : "Đăng nhập mật mã để thay đổi giao diện"}
+              title={isAdmin ? "Khóa quyền quản trị (Thoát Admin)" : "Đăng nhập mật mã để thay đổi giao diện"}
             >
               {isAdmin ? <Unlock className="w-3.2 h-3.2 text-green-400" /> : <Lock className="w-3.2 h-3.2 text-[#d4af37]" />}
-              <span>{isAdmin ? "CÀI ĐẶT WEB (ĐÃ MỞ)" : "CÀI ĐẶT WEB (ĐĂNG NHẬP)"}</span>
+              <span>{isAdmin ? "CÀI ĐẶT WEB (ẤN ĐỂ THOÁT)" : "CÀI ĐẶT WEB (ĐĂNG NHẬP)"}</span>
             </button>
           </div>
         </div>
@@ -786,6 +801,11 @@ export default function App() {
           currentSubtitle={websiteSubtitle}
           currentSlides={websiteSlides}
           currentPasscode={adminPasscode}
+          onLockAdmin={() => {
+            setIsAdmin(false);
+            localStorage.removeItem('is_family_admin_unlocked');
+            setIsWebsiteSettingsOpen(false);
+          }}
         />
       )}
 

@@ -89,7 +89,7 @@ export default function LightboxViewer({
         {/* Ambient Blur background layer - iOS Style */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30 z-0">
           <img
-            src={activePhoto.url}
+            src={activePhoto.thumbnailUrl || activePhoto.url}
             alt="blur-back"
             referrerPolicy="no-referrer"
             className="w-full h-full object-cover blur-[140px] scale-150 transition-all duration-1000"
@@ -111,7 +111,7 @@ export default function LightboxViewer({
                 {activePhoto.title}
               </span>
               <span className="text-white/40 font-mono text-[9px] tracking-widest leading-none mt-0.5">
-                IMAGE {currentIndex + 1} OF {photos.length}
+                {activePhoto.type === 'video' ? 'VIDEO' : 'IMAGE'} {currentIndex + 1} OF {photos.length}
               </span>
             </div>
           </div>
@@ -151,12 +151,23 @@ export default function LightboxViewer({
               transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
               className="max-w-full max-h-[70vh] sm:max-h-[78vh] flex items-center justify-center z-10 px-4"
             >
-              <img
-                src={activePhoto.url}
-                alt={activePhoto.title}
-                referrerPolicy="no-referrer"
-                className="max-w-full max-h-[70vh] sm:max-h-[78vh] object-contain rounded-2xl shadow-[0_30px_70px_rgba(0,0,0,0.9)] border border-white/10"
-              />
+              {activePhoto.type === 'video' ? (
+                <video
+                  src={activePhoto.url}
+                  controls
+                  autoPlay
+                  playsInline
+                  referrerPolicy="no-referrer"
+                  className="max-w-full max-h-[70vh] sm:max-h-[78vh] object-contain rounded-2xl shadow-[0_30px_70px_rgba(0,0,0,0.9)] border border-white/10"
+                />
+              ) : (
+                <img
+                  src={activePhoto.url}
+                  alt={activePhoto.title}
+                  referrerPolicy="no-referrer"
+                  className="max-w-full max-h-[70vh] sm:max-h-[78vh] object-contain rounded-2xl shadow-[0_30px_70px_rgba(0,0,0,0.9)] border border-white/10"
+                />
+              )}
             </motion.div>
           </AnimatePresence>
         </div>

@@ -25,6 +25,7 @@ interface WebsiteSettingsModalProps {
   currentSubtitle: string;
   currentSlides: HeroSlide[];
   currentPasscode: string;
+  onLockAdmin?: () => void;
 }
 
 export default function WebsiteSettingsModal({
@@ -34,6 +35,7 @@ export default function WebsiteSettingsModal({
   currentSubtitle,
   currentSlides,
   currentPasscode,
+  onLockAdmin,
 }: WebsiteSettingsModalProps) {
   const [title, setTitle] = useState(currentTitle);
   const [subtitle, setSubtitle] = useState(currentSubtitle);
@@ -417,37 +419,56 @@ export default function WebsiteSettingsModal({
               </div>
             )}
 
-            <div className="pt-4 border-t border-white/10 flex justify-end space-x-3">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-5 py-2.5 rounded-xl hover:bg-white/5 text-white/70 text-xs font-mono tracking-widest uppercase cursor-pointer"
-              >
-                HỦY
-              </button>
-              
-              <button
-                type="submit"
-                disabled={isSaving}
-                className="px-6 py-2.5 rounded-xl bg-[#d4af37] text-black font-semibold text-xs font-mono tracking-widest uppercase transition-all shadow-md active:scale-95 disabled:opacity-40 disabled:scale-100 cursor-pointer flex items-center space-x-2"
-              >
-                {isSaving ? (
-                  <>
-                    <div className="w-3.5 h-3.5 border-t-2 border-black border-r-2 border-transparent animate-spin rounded-full" />
-                    <span>ĐANG ĐỒNG BỘ...</span>
-                  </>
-                ) : saveSuccess ? (
-                  <>
-                    <Check className="w-3.5 h-3.5" />
-                    <span>THÀNH CÔNG!</span>
-                  </>
-                ) : (
-                  <>
-                    <Save className="w-3.5 h-3.5" />
-                    <span>LƯU CẤU HÌNH GIA ĐÌNH</span>
-                  </>
+            <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                {onLockAdmin && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onLockAdmin();
+                      onClose();
+                    }}
+                    className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-red-500/20 bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs font-mono tracking-widest uppercase cursor-pointer flex items-center justify-center gap-1.5 transition-colors"
+                    title="Khóa và ẩn bảng cấu hình Admin ngay lập tức"
+                  >
+                    <Lock className="w-3.5 h-3.5" />
+                    <span>KHÓA ADMIN (LOGOUT)</span>
+                  </button>
                 )}
-              </button>
+              </div>
+
+              <div className="flex items-center justify-end space-x-3 w-full sm:w-auto">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="px-5 py-2.5 rounded-xl hover:bg-white/5 text-white/70 text-xs font-mono tracking-widest uppercase cursor-pointer transition-colors"
+                >
+                  HỦY
+                </button>
+                
+                <button
+                  type="submit"
+                  disabled={isSaving}
+                  className="px-6 py-2.5 rounded-xl bg-[#d4af37] text-black font-semibold text-xs font-mono tracking-widest uppercase transition-all shadow-md active:scale-95 disabled:opacity-40 disabled:scale-100 cursor-pointer flex items-center space-x-2"
+                >
+                  {isSaving ? (
+                    <>
+                      <div className="w-3.5 h-3.5 border-t-2 border-black border-r-2 border-transparent animate-spin rounded-full" />
+                      <span>ĐANG ĐỒNG BỘ...</span>
+                    </>
+                  ) : saveSuccess ? (
+                    <>
+                      <Check className="w-3.5 h-3.5" />
+                      <span>THÀNH CÔNG!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-3.5 h-3.5" />
+                      <span>LƯU CẤU HÌNH GIA ĐÌNH</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </form>
         </motion.div>
