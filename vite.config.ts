@@ -7,7 +7,7 @@ export default defineConfig(() => {
   return {
     // Thay thế 'ten-kho-luu-tru' bằng tên Repository chính xác của bạn trên GitHub
     // Ví dụ: https://github.com/nguyenvana/family-album -> base: '/family-album/'
-    base: '/Family/',
+    base: '/family/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
