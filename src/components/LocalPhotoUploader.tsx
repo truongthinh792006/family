@@ -106,84 +106,84 @@ export default function LocalPhotoUploader({ onAddAlbum }: LocalPhotoUploaderPro
       {!isOpen ? (
         <div className="flex justify-center">
           <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={{ scale: 1.01, translateY: -1 }}
+            whileTap={{ scale: 0.99 }}
             onClick={() => setIsOpen(true)}
-            className="px-6 py-3.5 rounded-2xl bg-white/[0.03] hover:bg-white/[0.08] text-[#d4af37] border border-[#d4af37]/30 hover:border-[#d4af37] text-xs font-mono tracking-widest uppercase flex items-center space-x-2.5 transition-all cursor-pointer shadow-lg"
+            className="px-6 py-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.06] text-[#d4af37] border border-white/10 hover:border-[#d4af37]/45 text-[11px] font-mono tracking-[0.2em] uppercase flex items-center space-x-2.5 transition-all cursor-pointer shadow-sm"
           >
-            <Plus className="w-4 h-4" />
-            <span>Tạo Chuyến Đi & Tải Ảnh Thủ Công</span>
+            <Plus className="w-3.5 h-3.5" />
+            <span>Tạo album & tải ảnh thủ công</span>
           </motion.button>
         </div>
       ) : (
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="glass-panel rounded-3xl p-6 md:p-8 border border-white/10 max-w-2xl mx-auto space-y-6"
+          className="bg-[#0b0b0d]/70 backdrop-blur-2xl rounded-2xl p-6 md:p-7 border border-white/10 max-w-xl mx-auto space-y-6 shadow-xl"
         >
-          <div className="flex items-center justify-between border-b border-white/15 pb-4">
-            <div className="flex items-center space-x-2">
-              <Upload className="w-4.5 h-4.5 text-[#d4af37]" />
-              <h3 className="font-display text-xl text-white font-medium">Tải Ảnh Gia Đình Lên</h3>
+          <div className="flex items-center justify-between border-b border-white/5 pb-3">
+            <div className="flex items-center space-x-2.5">
+              <Upload className="w-4 h-4 text-[#d4af37]" />
+              <h3 className="font-sans text-[16px] text-white font-medium tracking-wide">Album Mới</h3>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="p-1.5 rounded-full hover:bg-white/10 text-white/50 hover:text-white transition-colors cursor-pointer"
+              className="p-1 rounded-full hover:bg-white/5 text-white/40 hover:text-white transition-colors cursor-pointer"
             >
-              <X className="w-4.5 h-4.5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
 
-          <form onSubmit={handleCreateAlbum} className="space-y-5">
+          <form onSubmit={handleCreateAlbum} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label className="font-mono text-[9px] uppercase tracking-widest text-white/50 block">Tên Chuyến Đi (Địa điểm)</label>
+              <div className="space-y-1">
+                <label className="font-mono text-[9px] uppercase tracking-widest text-white/40 block">Tên Chuyến Đi</label>
                 <input
                   required
                   type="text"
                   placeholder="Vd: Nha Trang, Sapa..."
                   value={albumName}
                   onChange={(e) => setAlbumName(e.target.value)}
-                  className="w-full py-2.5 px-4 rounded-xl bg-white/[0.04] focus:bg-white/[0.08] border border-white/5 focus:border-[#d4af37]/50 text-white text-xs focus:outline-none transition-all"
+                  className="w-full py-2 px-3 rounded-lg bg-white/[0.03] focus:bg-white/[0.06] border border-white/5 focus:border-[#d4af37]/40 text-white text-xs focus:outline-none transition-all font-sans"
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <label className="font-mono text-[9px] uppercase tracking-widest text-white/50 block">Năm Thực Hiện</label>
+              <div className="space-y-1">
+                <label className="font-mono text-[9px] uppercase tracking-widest text-white/40 block">Năm Thực Hiện</label>
                 <input
                   required
                   type="number"
                   placeholder="2026"
                   value={year}
                   onChange={(e) => setYear(Number(e.target.value))}
-                  className="w-full py-2.5 px-4 rounded-xl bg-white/[0.04] focus:bg-white/[0.08] border border-white/5 focus:border-[#d4af37]/50 text-white text-xs focus:outline-none transition-all"
+                  className="w-full py-2 px-3 rounded-lg bg-white/[0.03] focus:bg-white/[0.06] border border-white/5 focus:border-[#d4af37]/40 text-white text-xs focus:outline-none transition-all font-mono"
                 />
               </div>
             </div>
 
-            <div className="space-y-1.5">
-              <label className="font-mono text-[9px] uppercase tracking-widest text-white/50 block">Mô tả chuyến đi</label>
+            <div className="space-y-1">
+              <label className="font-mono text-[9px] uppercase tracking-widest text-white/40 block">Mô tả chuyến đi</label>
               <textarea
-                placeholder="Những kỷ niệm đáng nhớ ghi lại trong suốt chuyến hành trình..."
+                placeholder="Ghi chú lại những ký niệm ngọt ngào..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full py-2.5 px-4 rounded-xl bg-white/[0.04] focus:bg-white/[0.08] border border-white/5 focus:border-[#d4af37]/50 text-white text-xs focus:outline-none transition-all h-20 resize-none"
+                className="w-full py-2 px-3 rounded-lg bg-white/[0.03] focus:bg-white/[0.06] border border-white/5 focus:border-[#d4af37]/40 text-white text-xs focus:outline-none transition-all h-16 resize-none font-sans"
               />
             </div>
 
-            {/* Drag & Drop uploader framework */}
-            <div className="space-y-2">
-              <label className="font-mono text-[9px] uppercase tracking-widest text-white/50 block">Hình Ảnh Kỷ Niệm</label>
+            {/* Compact Drag & Drop Zone */}
+            <div className="space-y-1.5">
+              <label className="font-mono text-[9px] uppercase tracking-widest text-white/40 block">Hình Ảnh Kỷ Niệm</label>
               
               <div
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
                 onClick={triggerFileSelect}
-                className={`border border-dashed rounded-2xl p-8 text-center transition-all cursor-pointer flex flex-col items-center justify-center space-y-3 ${
+                className={`border border-dashed rounded-xl py-6 px-4 text-center transition-all cursor-pointer flex items-center justify-center space-x-4 ${
                   isDragging
                     ? 'border-[#d4af37] bg-[#d4af37]/5'
-                    : 'border-white/10 bg-white/[0.01] hover:border-white/20 hover:bg-white/[0.02]'
+                    : 'border-white/10 bg-white/[0.01] hover:border-[#d4af37]/35 hover:bg-white/[0.02]'
                 }`}
               >
                 <input
@@ -195,16 +195,16 @@ export default function LocalPhotoUploader({ onAddAlbum }: LocalPhotoUploaderPro
                   className="hidden"
                 />
                 
-                <div className="p-3.5 rounded-full bg-white/[0.03] border border-white/15 text-[#d4af37]">
-                  <ImageIcon className="w-6 h-6" />
+                <div className="p-2.5 rounded-full bg-white/[0.03] border border-white/10 text-[#d4af37] flex-shrink-0">
+                  <ImageIcon className="w-5 h-5" />
                 </div>
 
-                <div className="space-y-1">
-                  <span className="text-white text-xs font-medium block">
-                    Kéo thả ảnh hoặc <span className="text-[#d4af37] underline">Chọn từ máy</span>
+                <div className="text-left space-y-0.5">
+                  <span className="text-white text-[12px] font-sans font-medium block">
+                    Kéo thả ảnh hoặc <span className="text-[#d4af37] underline">Chọn tập tin</span>
                   </span>
-                  <span className="text-white/45 text-[10px] block font-mono">
-                    Hỗ trợ PNG, JPG, WebP. Tải lên bao nhiêu tùy thích.
+                  <span className="text-white/35 text-[9.5px] block font-light">
+                    Hỗ trợ định dạng phổ biến. Tải bao nhiêu tùy ý.
                   </span>
                 </div>
               </div>
@@ -212,14 +212,14 @@ export default function LocalPhotoUploader({ onAddAlbum }: LocalPhotoUploaderPro
 
             {/* List of uploaded previews */}
             {photos.length > 0 && (
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <span className="font-mono text-[9px] uppercase tracking-widest text-[#d4af37] block">
-                  ĐÃ TẢI LÊN ({photos.length} ẢNH)
+                  Sẽ thêm vào album ({photos.length} ảnh)
                 </span>
                 
-                <div className="grid grid-cols-4 gap-3 max-h-40 overflow-y-auto pr-1 no-scrollbar">
+                <div className="grid grid-cols-5 gap-2 max-h-32 overflow-y-auto pr-1 no-scrollbar">
                   {photos.map((photo) => (
-                    <div key={photo.id} className="relative aspect-square rounded-xl overflow-hidden border border-white/10 group">
+                    <div key={photo.id} className="relative aspect-square rounded-lg overflow-hidden border border-white/5 group">
                       <img
                         src={photo.url}
                         alt="Preview"
@@ -227,10 +227,13 @@ export default function LocalPhotoUploader({ onAddAlbum }: LocalPhotoUploaderPro
                       />
                       <button
                         type="button"
-                        onClick={() => handleRemovePhoto(photo.id)}
-                        className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center hover:bg-red-500/40 text-white transition-opacity cursor-pointer text-xs"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRemovePhoto(photo.id);
+                        }}
+                        className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex items-center justify-center hover:bg-red-500/40 text-white transition-opacity cursor-pointer text-[10px] font-mono tracking-widest uppercase"
                       >
-                        Xóa
+                        XÓA
                       </button>
                     </div>
                   ))}
@@ -239,21 +242,21 @@ export default function LocalPhotoUploader({ onAddAlbum }: LocalPhotoUploaderPro
             )}
 
             {/* Form Actions */}
-            <div className="pt-4 border-t border-white/10 flex justify-end space-x-3">
+            <div className="pt-3.5 border-t border-white/5 flex justify-end space-x-2.5">
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="px-4 py-2.5 rounded-xl hover:bg-white/5 text-white/70 text-xs font-mono tracking-widest uppercase cursor-pointer"
+                className="px-4 py-2 rounded-lg hover:bg-white/5 text-white/50 text-xs font-mono tracking-wider uppercase cursor-pointer"
               >
-                HỦY
+                Hủy
               </button>
               <button
                 type="submit"
                 disabled={!albumName.trim() || photos.length === 0}
-                className="px-5 py-2.5 rounded-xl bg-[#d4af37] text-black font-semibold text-xs font-mono tracking-widest uppercase transition-all shadow-md active:scale-95 disabled:opacity-40 disabled:scale-100 cursor-pointer flex items-center space-x-1.5"
+                className="px-5 py-2.5 rounded-lg bg-[#d4af37] hover:bg-[#ffe180] text-black font-semibold text-xs font-mono tracking-wider uppercase transition-all shadow-md active:scale-95 disabled:opacity-30 disabled:scale-100 cursor-pointer flex items-center space-x-1.5"
               >
                 <Check className="w-3.5 h-3.5" />
-                <span>Hoàn Tất & Xem Album</span>
+                <span>Hoàn tất</span>
               </button>
             </div>
           </form>

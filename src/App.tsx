@@ -43,6 +43,7 @@ export default function App() {
   const [websiteTitle, setWebsiteTitle] = useState<string>('FAMILY TRUONG');
   const [websiteSubtitle, setWebsiteSubtitle] = useState<string>('FINE ART CHRONICLE');
   const [websiteSlides, setWebsiteSlides] = useState<any[]>([]);
+  const [adminPasscode, setAdminPasscode] = useState<string>('truongthinh79');
 
   // Modals visibility triggers
   const [isWebsiteSettingsOpen, setIsWebsiteSettingsOpen] = useState<boolean>(false);
@@ -102,6 +103,7 @@ export default function App() {
         if (data.title) setWebsiteTitle(data.title.toUpperCase());
         if (data.subtitle) setWebsiteSubtitle(data.subtitle);
         if (data.heroSlides) setWebsiteSlides(data.heroSlides);
+        if (data.passcode) setAdminPasscode(data.passcode);
       }
     });
     return () => unsub();
@@ -486,17 +488,17 @@ export default function App() {
         </nav>
 
         {/* Header Right Trigger action */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-2 md:space-x-3">
           {isAdmin ? (
             <>
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsWebsiteSettingsOpen(true)}
-                className="px-3.5 py-2 rounded-full border border-[#d4af37]/20 bg-[#d4af37]/5 hover:bg-[#d4af37]/15 text-[#d4af37] font-mono text-[9px] tracking-widest uppercase flex items-center space-x-1.5 cursor-pointer transition-all shrink-0"
-                title="Chỉnh sửa giao diện & Ảnh bìa đầu trang"
+                className="px-3.5 md:px-4.5 py-2 rounded-full border border-[#d4af37]/45 bg-[#d4af37]/10 hover:bg-[#d4af37]/20 text-[#d4af37] font-sans text-[11px] font-bold tracking-wider uppercase flex items-center space-x-1.5 cursor-pointer transition-all shrink-0 shadow-[0_2px_12px_rgba(212,175,55,0.15)]"
+                title="Sửa đổi Giao diện & Tiêu đề"
               >
-                <Settings className="w-3.5 h-3.5 animate-pulse" />
-                <span className="hidden sm:inline">CÀI ĐẶT WEB</span>
+                <Settings className="w-3.5 h-3.5 text-[#d4af37]" />
+                <span>CÀI ĐẶT WEB</span>
               </motion.button>
 
               {user ? (
@@ -506,26 +508,32 @@ export default function App() {
                     setSyncSource('google');
                     document.getElementById('metadata-sync')?.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="px-3 md:px-4 py-2 rounded-full border border-green-500/20 bg-green-500/10 text-green-400 font-mono text-[9px] tracking-widest uppercase flex items-center space-x-1.5 cursor-pointer hover:bg-green-500/20"
+                  className="px-2.5 md:px-4 py-2 rounded-full border border-green-500/20 bg-green-500/10 text-green-400 font-mono text-[9px] tracking-widest uppercase flex items-center space-x-1.5 cursor-pointer hover:bg-green-500/20 shrink-0"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-green-400"></span>
-                  <span>SIGNED IN</span>
+                  <span className="hidden xs:inline">SIGNED IN</span>
                 </motion.button>
               ) : (
                 <motion.button
                   whileTap={{ scale: 0.95 }}
                   onClick={handleLogin}
-                  className="px-3 md:px-4 py-2 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-white font-mono text-[9px] tracking-widest uppercase flex items-center space-x-1.5 cursor-pointer transition-all"
+                  className="px-2.5 md:px-4 py-2 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-white font-mono text-[9px] tracking-widest uppercase flex items-center space-x-1.5 cursor-pointer transition-all shrink-0"
                 >
                   <LogIn className="w-3 h-3 text-white/50" />
-                  <span>CONNECT PHOTOS</span>
+                  <span className="hidden xs:inline">CONNECT PHOTOS</span>
                 </motion.button>
               )}
             </>
           ) : (
-            <div className="px-3 py-1 text-[8px] font-mono text-white/30 border border-white/5 rounded-full uppercase tracking-wider">
-              Viewer Mode
-            </div>
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setPasscodePromptOpen(true)}
+              className="px-4 py-2 rounded-full border border-[#d4af37]/35 bg-[#d4af37]/5 hover:bg-[#d4af37]/15 text-[#d4af37] font-sans text-[11px] font-bold tracking-wider uppercase flex items-center space-x-1.5 cursor-pointer transition-all shadow-[0_4px_15px_rgba(212,175,55,0.1)]"
+              title="Đăng nhập để vào Cài đặt Web"
+            >
+              <Lock className="w-3 h-3" />
+              <span>ĐĂNG NHẬP ADMIN (CÀI ĐẶT WEB)</span>
+            </motion.button>
           )}
         </div>
       </header>
@@ -740,21 +748,21 @@ export default function App() {
         {/* Floating line bottom credits */}
         <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between text-[10px] font-mono text-white/30 tracking-widest gap-4">
           <span>DESIGNED BY APPLE VISUAL INSPIRED ARTISANS</span>
-          <div className="flex items-center space-x-2.5">
+          <div className="flex items-center space-x-4">
             <span>© 2026 THE TRUONG CLAN CHRONICLES. ALL RIGHTS RESERVED.</span>
             <button
               onClick={() => {
                 if (isAdmin) {
-                  setIsAdmin(false);
-                  localStorage.removeItem('is_family_admin_unlocked');
+                  setIsWebsiteSettingsOpen(true);
                 } else {
                   setPasscodePromptOpen(true);
                 }
               }}
-              className="w-4 h-4 text-white/25 hover:text-[#d4af37] transition-all cursor-pointer flex items-center justify-center p-0 ml-1.5 focus:outline-none"
-              title={isAdmin ? "Khoá quyền quản trị" : "Nhập mật mã quản lý"}
+              className="hover:text-[#d4af37] transition-all cursor-pointer text-white/40 hover:scale-105 flex items-center gap-1.5 focus:outline-none text-[10px] uppercase font-mono tracking-widest border-l border-white/10 pl-3.5"
+              title={isAdmin ? "Mở bảng Cài đặt Web" : "Đăng nhập mật mã để thay đổi giao diện"}
             >
-              {isAdmin ? <Unlock className="w-3.5 h-3.5" /> : <Lock className="w-3.5 h-3.5" />}
+              {isAdmin ? <Unlock className="w-3.2 h-3.2 text-green-400" /> : <Lock className="w-3.2 h-3.2 text-[#d4af37]" />}
+              <span>{isAdmin ? "CÀI ĐẶT WEB (ĐÃ MỞ)" : "CÀI ĐẶT WEB (ĐĂNG NHẬP)"}</span>
             </button>
           </div>
         </div>
@@ -777,6 +785,7 @@ export default function App() {
           currentTitle={websiteTitle}
           currentSubtitle={websiteSubtitle}
           currentSlides={websiteSlides}
+          currentPasscode={adminPasscode}
         />
       )}
 
@@ -791,38 +800,158 @@ export default function App() {
         />
       )}
 
-      {/* 10. Minimalist passcode prompt modal for admin mode unlock */}
+      {/* 10. High-end iOS circular PIN Passcode Modal for Admin Unlock */}
       <AnimatePresence>
         {passcodePromptOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-6"
+            className="fixed inset-0 bg-black/95 backdrop-blur-xl z-50 flex flex-col items-center justify-center p-6"
           >
+            {/* iOS Styled container */}
             <motion.div
-              initial={{ scale: 0.95, y: 15 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.95, y: 15 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="w-full max-w-sm rounded-2xl border border-white/10 bg-[#0c0c0e] p-8 shadow-2xl relative"
+              initial={{ scale: 0.96, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.96, opacity: 0, y: 20 }}
+              transition={{ type: 'spring', damping: 26, stiffness: 220 }}
+              className="w-full max-w-sm flex flex-col items-center text-center space-y-10"
             >
-              <div className="flex flex-col items-center text-center space-y-4">
-                <div className="w-10 h-10 rounded-full border border-[#d4af37]/30 flex items-center justify-center bg-[#d4af37]/5">
-                  <Shield className="w-4 h-4 text-[#d4af37]" />
+              <div className="space-y-3.5">
+                <div className="mx-auto w-12 h-12 rounded-full bg-white/[0.04] border border-white/10 flex items-center justify-center">
+                  <Lock className="w-5 h-5 text-[#d4af37]" />
                 </div>
                 
-                <div className="space-y-1">
-                  <h3 className="font-display font-medium text-lg text-white tracking-tight">KHOÁ QUẢN TRỊ VIÊN</h3>
-                  <p className="text-xs text-white/40 leading-relaxed font-sans font-light px-2">
-                    Vui lòng cung cấp mật mã quản trị để mở khoá tính năng sửa đổi, xoá album & tải ảnh.
+                <div className="space-y-1.5 animate-fade-in">
+                  <h3 className="font-sans font-medium text-lg text-white tracking-widest uppercase">Nhập mật mã</h3>
+                  <p className="text-[11px] text-white/40 font-light max-w-xs leading-relaxed px-4">
+                    Nhập mật mã mở khóa quyền Admin của gia đình. Mật mã cũ <code className="font-mono bg-white/5 px-1 rounded">123456</code> đã bị thu hồi vì lý do an toàn.
                   </p>
                 </div>
+              </div>
 
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    if (passcodeInput === 'truongthinh79' || passcodeInput === '123456') {
+              {/* iOS Dot Grid representing character entry progress */}
+              <div className="flex space-x-5 justify-center">
+                {Array.from({ length: Math.max(6, passcodeInput.length) }).map((_, i) => {
+                  const isFilled = i < passcodeInput.length;
+                  return (
+                    <motion.div
+                      key={i}
+                      animate={isFilled ? { scale: [1, 1.25, 1] } : {}}
+                      transition={{ duration: 0.15 }}
+                      className={`w-3.5 h-3.5 rounded-full transition-all duration-300 ${
+                        isFilled
+                          ? 'bg-[#d4af37] shadow-[0_0_12px_rgba(212,175,55,0.73)] border-transparent'
+                          : 'border border-white/20 bg-transparent'
+                      }`}
+                    />
+                  );
+                })}
+              </div>
+
+              {/* Invisible touch focus form for physical keyboard users typing seamlessly */}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (passcodeInput === adminPasscode || passcodeInput === 'truongthinh79') {
+                    setIsAdmin(true);
+                    try {
+                      localStorage.setItem('is_family_admin_unlocked', 'true');
+                    } catch {}
+                    setPasscodePromptOpen(false);
+                    setPasscodeInput('');
+                    setPasscodeError(false);
+                  } else {
+                    setPasscodeError(true);
+                    setPasscodeInput('');
+                  }
+                }}
+                className="w-0 h-0 opacity-0 overflow-hidden"
+              >
+                <input
+                  type="password"
+                  value={passcodeInput}
+                  onChange={(e) => {
+                    setPasscodeInput(e.target.value);
+                    setPasscodeError(false);
+                  }}
+                  autoFocus
+                />
+              </form>
+
+              {passcodeError && (
+                <motion.div
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-[11px] font-mono text-red-400 uppercase tracking-widest animate-shake"
+                >
+                  ● Mật mã không chính xác
+                </motion.div>
+              )}
+
+              {/* iOS Touch Ring Keypad Grid */}
+              <div className="grid grid-cols-3 gap-x-8 gap-y-5 w-full max-w-[280px]">
+                {['1', '2', '3', '4', '5', '6', '7', '8', '9'].map((num) => (
+                  <button
+                    key={num}
+                    type="button"
+                    onClick={() => {
+                      if (passcodeInput.length >= 12) return;
+                      setPasscodeInput(prev => prev + num);
+                      setPasscodeError(false);
+                    }}
+                    className="w-16 h-16 rounded-full bg-white/[0.03] hover:bg-white/[0.08] active:bg-white/[0.15] border border-white/5 active:scale-95 text-xl font-sans text-white flex items-center justify-center transition-all cursor-pointer shadow-sm select-none"
+                  >
+                    {num}
+                  </button>
+                ))}
+
+                {/* Cancel Trigger button inside keypad */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPasscodePromptOpen(false);
+                    setPasscodeInput('');
+                    setPasscodeError(false);
+                  }}
+                  className="w-16 h-16 text-xs font-sans text-white/55 hover:text-white flex items-center justify-center cursor-pointer transition-colors uppercase tracking-wider select-none"
+                >
+                  Huỷ
+                </button>
+
+                {/* 0 Key */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (passcodeInput.length >= 12) return;
+                    setPasscodeInput(prev => prev + '0');
+                    setPasscodeError(false);
+                  }}
+                  className="w-16 h-16 rounded-full bg-white/[0.03] hover:bg-white/[0.08] active:bg-white/[0.15] border border-white/5 active:scale-95 text-xl font-sans text-white flex items-center justify-center transition-all cursor-pointer shadow-sm select-none"
+                >
+                  0
+                </button>
+
+                {/* Backspace Delete button */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPasscodeInput(prev => prev.slice(0, -1));
+                    setPasscodeError(false);
+                  }}
+                  className="w-16 h-16 text-xs font-sans text-white/55 hover:text-white flex items-center justify-center cursor-pointer transition-colors uppercase tracking-wider select-none"
+                >
+                  Xóa
+                </button>
+              </div>
+
+              {/* High precision trigger button layout below digits keypad */}
+              <div className="pt-2 w-full max-w-[240px]">
+                <button
+                  type="button"
+                  disabled={passcodeInput.length === 0}
+                  onClick={() => {
+                    if (passcodeInput === adminPasscode || passcodeInput === 'truongthinh79') {
                       setIsAdmin(true);
                       try {
                         localStorage.setItem('is_family_admin_unlocked', 'true');
@@ -832,57 +961,39 @@ export default function App() {
                       setPasscodeError(false);
                     } else {
                       setPasscodeError(true);
+                      setPasscodeInput('');
                     }
                   }}
-                  className="w-full space-y-4 pt-2"
+                  className="w-full py-3.5 rounded-full bg-[#d4af37] disabled:bg-white/5 text-black disabled:text-white/20 hover:bg-white hover:text-black font-semibold text-xs font-mono tracking-widest uppercase transition-all shadow-md active:scale-98 cursor-pointer"
                 >
-                  <input
-                    type="password"
-                    placeholder="Nhập mật mã..."
-                    value={passcodeInput}
-                    onChange={(e) => {
-                      setPasscodeInput(e.target.value);
-                      setPasscodeError(false);
-                    }}
-                    autoFocus
-                    className="w-full px-4 py-3 rounded-xl border border-white/5 bg-white/[0.02] text-white text-center font-mono text-sm tracking-widest focus:outline-none focus:border-[#d4af37]/40 transition-colors"
-                  />
-
-                  {passcodeError && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="text-[10px] font-mono text-red-400 uppercase tracking-wider animate-shake"
-                    >
-                      ● Mật mã không chính xác
-                    </motion.div>
-                  )}
-
-                  <div className="flex gap-3 pt-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setPasscodePromptOpen(false);
-                        setPasscodeInput('');
-                        setPasscodeError(false);
-                      }}
-                      className="flex-1 py-3 border border-white/5 bg-transparent hover:bg-white/[0.04] text-white/70 hover:text-white rounded-xl font-mono text-[10px] tracking-widest uppercase cursor-pointer transition-all"
-                    >
-                      Huỷ bỏ
-                    </button>
-                    <button
-                      type="submit"
-                      className="flex-1 py-3 border border-[#d4af37]/30 bg-[#d4af37]/10 hover:bg-[#d4af37]/25 text-[#d4af37] rounded-xl font-mono text-[10px] tracking-widest uppercase cursor-pointer transition-all"
-                    >
-                      Xác nhận
-                    </button>
-                  </div>
-                </form>
+                  Xác nhận mật mã
+                </button>
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* 11. iOS-styled Golden Floating Action Button (FAB) for Web Settings when Admin is active */}
+      {isAdmin && (
+        <motion.div
+          initial={{ scale: 0, opacity: 0, y: 20 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          className="fixed bottom-6 right-6 z-40"
+        >
+          <motion.button
+            whileHover={{ scale: 1.05, translateY: -2 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setIsWebsiteSettingsOpen(true)}
+            className="flex items-center space-x-2 px-4.5 py-3 rounded-full bg-black/90 hover:bg-black border border-[#d4af37] text-[#d4af37] shadow-[0_10px_30px_rgba(212,175,55,0.25)] hover:shadow-[0_15px_35px_rgba(212,175,55,0.4)] backdrop-blur-md transition-all cursor-pointer group"
+          >
+            <div className="p-1 rounded-full bg-[#d4af37]/10 text-[#d4af37] group-hover:rotate-45 transition-transform duration-500">
+              <Settings className="w-4 h-4" />
+            </div>
+            <span className="font-sans text-[11px] font-bold tracking-wider uppercase pr-1">CÀI ĐẶT WEB</span>
+          </motion.button>
+        </motion.div>
+      )}
     </div>
   );
 }

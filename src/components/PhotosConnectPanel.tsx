@@ -155,39 +155,52 @@ export default function PhotosConnectPanel({
             </div>
           </div>
 
-          {/* Source Toggle Selector Buttons */}
-          <div className="flex flex-wrap items-center gap-2.5 pt-2 border-t border-white/5">
-            <button
-              onClick={() => setSyncSource('local')}
-              className={`px-4 py-2 rounded-xl text-xs font-mono tracking-wider flex items-center space-x-2 border transition-all cursor-pointer ${
-                syncSource === 'local'
-                  ? 'bg-white/10 text-white border-white/15 shadow-md'
-                  : 'bg-transparent text-white/50 border-white/5 hover:text-white/80'
-              }`}
-            >
-              <LayoutGrid className="w-3.5 h-3.5" />
-              <span>LOCAL ARCHIVE</span>
-            </button>
+          {/* iOS Style Segmented Pill Selector (Nguồn dữ liệu) */}
+          <div className="pt-3 border-t border-white/5 space-y-1.5 max-w-[340px]">
+            <span className="font-mono text-[9px] uppercase tracking-widest text-[#d4af37] block font-semibold">LỰA CHỌN NGUỒN KHAI THÁC LƯU TRỮ</span>
+            <div className="relative p-1 rounded-xl bg-white/[0.02] border border-white/5 flex">
+              {/* Local Storage Pill Option */}
+              <button
+                type="button"
+                onClick={() => setSyncSource('local')}
+                className={`relative flex-1 py-2 rounded-lg text-[11px] font-sans font-semibold tracking-wide transition-colors duration-350 cursor-pointer ${
+                  syncSource === 'local' ? 'text-black z-10' : 'text-white/55 hover:text-white'
+                }`}
+              >
+                {syncSource === 'local' && (
+                  <motion.div
+                    layoutId="activeSourceTab"
+                    className="absolute inset-0 bg-[#d4af37] rounded-lg -z-10 shadow-md"
+                    transition={{ type: 'spring', duration: 0.45, bounce: 0.15 }}
+                  />
+                )}
+                <span>Bộ nhớ local ({googleAlbumsCount ? 'Ngoại tuyến' : 'Tự tạo'})</span>
+              </button>
 
-            <button
-              onClick={() => {
-                if (needsAuth || !user) {
-                  onLogin();
-                } else {
-                  setSyncSource('google');
-                }
-              }}
-              className={`px-4 py-2 rounded-xl text-xs font-mono tracking-wider flex items-center space-x-2 border transition-all cursor-pointer ${
-                syncSource === 'google'
-                  ? 'bg-green-500/15 text-green-400 border-green-500/30'
-                  : 'bg-transparent text-white/50 border-white/5 hover:text-white/80'
-              }`}
-            >
-              <Cloud className="w-3.5 h-3.5" />
-              <span>
-                GOOGLE CLOUD ({user ? googleAlbumsCount : 'LINKED'})
-              </span>
-            </button>
+              {/* Google Storage Pill Option */}
+              <button
+                type="button"
+                onClick={() => {
+                  if (needsAuth || !user) {
+                    onLogin();
+                  } else {
+                    setSyncSource('google');
+                  }
+                }}
+                className={`relative flex-1 py-2 rounded-lg text-[11px] font-sans font-semibold tracking-wide transition-colors duration-350 cursor-pointer ${
+                  syncSource === 'google' ? 'text-black z-10' : 'text-white/55 hover:text-white'
+                }`}
+              >
+                {syncSource === 'google' && (
+                  <motion.div
+                    layoutId="activeSourceTab"
+                    className="absolute inset-0 bg-[#d4af37] rounded-lg -z-10 shadow-md"
+                    transition={{ type: 'spring', duration: 0.45, bounce: 0.15 }}
+                  />
+                )}
+                <span>Google Photos Cloud</span>
+              </button>
+            </div>
           </div>
         </div>
 

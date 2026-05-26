@@ -79,7 +79,7 @@ export default function MasonryGallery({ album, onPhotoClick, onEditAlbum }: Mas
                 className="break-inside-avoid relative group cursor-pointer"
                 onClick={() => onPhotoClick(index)}
               >
-                {/* 7-Color Running Rainbow Glow Wrapper and Inner Container */}
+                {/* iOS Champagne-Gold High-Contrast Accent Border */}
                 <div className="rainbow-glow-wrapper rounded-2xl overflow-hidden shadow-xl transition-all duration-300">
                   <div className="rainbow-glow-inner">
                     {/* Visual Image container with different vertical flow rates */}

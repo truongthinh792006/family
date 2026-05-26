@@ -72,8 +72,8 @@ html {
   animation-play-state: paused; /* Pause gently on hover for readability */
 }
 
-/* 2. 7-Color Rainbow Running Light (Hiệu ứng ánh sáng 7 màu) */
-@keyframes rainbow-running-light {
+/* 2. Premium iOS Champagne-Gold Dynamic Border */
+@keyframes gold-running-light {
   0% {
     background-position: 0% 50%;
   }
@@ -96,28 +96,26 @@ html {
   position: relative;
   z-index: 10;
   background-color: #030303;
-  border-radius: 14px;
+  border-radius: 20px;
   overflow: hidden;
   height: 100%;
   width: 100%;
 }
 
-/* Decorative running gradient container wrapper */
+/* Dynamic elegant champagne-gold accent border */
 .rainbow-glow-wrapper {
   position: relative;
-  padding: 2.5px; /* Border thickness */
+  padding: 1px; /* Precision fine border matching Apple style */
   background: linear-gradient(
     270deg,
-    #ff0055,
-    #ff9900,
-    #33ff00,
-    #00ffff,
-    #0022ff,
-    #9900ff,
-    #ff0055
+    rgba(255, 255, 255, 0.08),
+    rgba(212, 175, 55, 0.25),
+    rgba(255, 255, 255, 0.08),
+    rgba(212, 175, 55, 0.45),
+    rgba(255, 255, 255, 0.08)
   );
   background-size: 300% 300%;
-  animation: rainbow-running-light 6s linear infinite;
+  animation: gold-running-light 10s linear infinite;
   transition: filter 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -127,21 +125,21 @@ html {
   position: absolute;
   inset: -1px;
   background: inherit;
-  filter: blur(12px);
-  opacity: 0.15;
+  filter: blur(8px);
+  opacity: 0.1;
   z-index: -1;
   transition: opacity 0.4s ease, filter 0.4s ease;
 }
 
 /* Interactive cursor hover state */
 .rainbow-glow-wrapper:hover {
-  transform: translateY(-4px) scale(1.015);
-  animation-duration: 3s; /* Run much faster when hovered to create an exciting light show */
+  transform: translateY(-4px) scale(1.01);
+  animation-duration: 4s; /* Flows slightly faster on hover */
 }
 
 .rainbow-glow-wrapper:hover::after {
-  opacity: 0.85; /* Vibrant glowing halo around the image container */
-  filter: blur(18px);
+  opacity: 0.55; /* Refined golden halo backing */
+  filter: blur(12px);
 }
 
 /* Infinite Shake Keyframes */

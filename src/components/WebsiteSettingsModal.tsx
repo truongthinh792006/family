@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Save, Edit, Sparkles, Image as ImageIcon, Link2, Settings, AlertCircle, Check, HelpCircle } from 'lucide-react';
+import { X, Save, Edit, Sparkles, Image as ImageIcon, Link2, Settings, AlertCircle, Check, HelpCircle, Lock } from 'lucide-react';
 import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { HERO_SLIDES } from '../data';
@@ -24,6 +24,7 @@ interface WebsiteSettingsModalProps {
   currentTitle: string;
   currentSubtitle: string;
   currentSlides: HeroSlide[];
+  currentPasscode: string;
 }
 
 export default function WebsiteSettingsModal({
@@ -32,9 +33,11 @@ export default function WebsiteSettingsModal({
   currentTitle,
   currentSubtitle,
   currentSlides,
+  currentPasscode,
 }: WebsiteSettingsModalProps) {
   const [title, setTitle] = useState(currentTitle);
   const [subtitle, setSubtitle] = useState(currentSubtitle);
+  const [passcode, setPasscode] = useState(currentPasscode);
   const [showPhotoGuide, setShowPhotoGuide] = useState(false);
   
   // Initialize with exactly 3 slides, falling back if empty
@@ -101,6 +104,7 @@ export default function WebsiteSettingsModal({
         title: title.trim(),
         subtitle: subtitle.trim(),
         heroSlides: slides,
+        passcode: passcode.trim(),
         lastUpdated: new Date().toISOString(),
       });
 
@@ -372,6 +376,35 @@ export default function WebsiteSettingsModal({
                       </div>
                     </div>
                   )}
+                </div>
+              </div>
+            </div>
+
+            {/* Part 3: Dynamic Admin Passcode settings */}
+            <div className="space-y-4 pt-4 border-t border-white/5">
+              <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#d4af37] block font-semibold">
+                3. BẢO MẬT & MẬT MÃ QUẢN TRỊ (ADMIN PASSCODE)
+              </span>
+
+              <div className="p-5 rounded-2xl bg-white/[0.01] border border-white/5 space-y-4">
+                <div className="space-y-1.5 max-w-md">
+                  <label className="font-mono text-[9px] uppercase tracking-widest text-white/50 block">Mật mã mở khóa quyền Admin</label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                      <Lock className="h-4 w-4 text-white/30" />
+                    </div>
+                    <input
+                      required
+                      type="text"
+                      placeholder="Mật mã Admin (mặc định: truongthinh79)"
+                      value={passcode}
+                      onChange={(e) => setPasscode(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/[0.04] focus:bg-white/[0.08] border border-white/5 focus:border-[#d4af37]/50 text-white font-mono text-xs tracking-widest focus:outline-none transition-all"
+                    />
+                  </div>
+                  <span className="text-[9.5px] text-white/35 block leading-relaxed gap-1">
+                    ● Hệ thống đã loại bỏ mật mã mặc định yếu <code className="font-mono bg-white/5 px-1 rounded text-[#d4af37]">123456</code> để đảm bảo an toàn tuyệt đối. Hãy thay đổi mật mã này để tự thiết lập chuỗi mật mã bảo vệ của riêng bạn!
+                  </span>
                 </div>
               </div>
             </div>
