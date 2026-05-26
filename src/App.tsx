@@ -44,6 +44,7 @@ export default function App() {
   const [websiteSubtitle, setWebsiteSubtitle] = useState<string>('FINE ART CHRONICLE');
   const [websiteSlides, setWebsiteSlides] = useState<any[]>([]);
   const [adminPasscode, setAdminPasscode] = useState<string>('truongthinh79');
+  const [websiteTheme, setWebsiteTheme] = useState<string>('cinematic');
 
   // Modals visibility triggers
   const [isWebsiteSettingsOpen, setIsWebsiteSettingsOpen] = useState<boolean>(false);
@@ -104,6 +105,7 @@ export default function App() {
         if (data.subtitle) setWebsiteSubtitle(data.subtitle);
         if (data.heroSlides) setWebsiteSlides(data.heroSlides);
         if (data.passcode) setAdminPasscode(data.passcode);
+        if (data.theme) setWebsiteTheme(data.theme);
       }
     });
     return () => unsub();
@@ -455,32 +457,99 @@ export default function App() {
   const albumsToRender = syncSource === 'local' ? [...renderingFilteredCustoms, ...renderingFilteredDefaults] : googleAlbums;
   const activeAlbum = albumsToRender.find((a) => a.id === activeAlbumId);
 
+  const isEditorial = websiteTheme === 'editorial_warm';
+  const isRetro = websiteTheme === 'retro_mono';
+
+  const containerThemeClasses = isEditorial
+    ? 'bg-[#FAF9F6] text-stone-800 font-serif'
+    : isRetro
+    ? 'bg-[#1c1511] text-[#eedcc0] font-mono'
+    : 'bg-[#030303] text-[#f5f5f7] font-sans';
+
+  const accentTextClass = isEditorial
+    ? 'text-[#a37a3e]'
+    : isRetro
+    ? 'text-[#c5a059]'
+    : 'text-[#d4af37]';
+
+  const accentBgClass = isEditorial
+    ? 'bg-[#a37a3e]'
+    : isRetro
+    ? 'bg-[#c5a059]'
+    : 'bg-[#d4af37]';
+
+  const accentBorderClass = isEditorial
+    ? 'border-[#a37a3e]'
+    : isRetro
+    ? 'border-[#c5a059]/35'
+    : 'border-[#d4af37]';
+
+  const sectionHeadingClass = isEditorial
+    ? 'font-serif text-stone-800 italic text-3xl md:text-5xl font-bold tracking-normal'
+    : isRetro
+    ? 'font-mono text-[#e6d5bf] text-2xl md:text-4xl uppercase tracking-wider font-extrabold'
+    : 'font-display text-white text-3xl md:text-5xl font-medium tracking-tight';
+
+  const subtextClass = isEditorial
+    ? 'text-stone-500 font-serif italic'
+    : isRetro
+    ? 'text-[#c5a059]/80 font-mono text-xs uppercase'
+    : 'text-white/40 font-sans font-light';
+
   return (
-    <div className="min-h-screen bg-[#030303] text-[#f5f5f7] font-sans antialiased overflow-x-hidden selection:bg-white/[0.15]">
+    <div className={`min-h-screen antialiased overflow-x-hidden transition-all duration-500 selection:bg-white/[0.15] ${containerThemeClasses}`}>
+      {/* Vintage film effects for Giao diện 3 "Xước nhẹ" */}
+      {isRetro && (
+        <>
+          <div className="vintage-scratches" />
+          <div className="vintage-grain" />
+        </>
+      )}
+
       {/* 1. Header with Glassmorphic navigation menu */}
-      <header className="fixed top-0 inset-x-0 h-20 bg-black/40 backdrop-blur-md border-b border-white/5 z-40 flex items-center justify-between px-6 md:px-16 transition-all duration-300">
+      <header className={`fixed top-0 inset-x-0 h-20 backdrop-blur-md z-40 flex items-center justify-between px-6 md:px-16 transition-all duration-350 ${
+        isEditorial
+          ? 'bg-[#FAF9F6]/85 border-b border-stone-200/50'
+          : isRetro
+          ? 'bg-[#1c1511]/90 border-b border-[#c5a059]/20'
+          : 'bg-[#030303]/40 border-b border-white/5'
+      }`}>
         <div 
           className={`flex items-center space-x-3.5 ${isAdmin ? 'cursor-pointer' : ''}`} 
           onClick={isAdmin ? () => setIsWebsiteSettingsOpen(true) : undefined} 
           title={isAdmin ? "Nhấn để thiết lập tiêu đề website" : undefined}
         >
-          <div className="w-8 h-8 rounded-full border border-[#d4af37]/70 flex items-center justify-center bg-white/[0.02]">
-            <Compass className="w-4.5 h-4.5 text-[#d4af37]" />
+          <div className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${
+            isEditorial
+              ? 'border-[#a37a3e]/60 bg-[#a37a3e]/5'
+              : isRetro
+              ? 'border-[#c5a059]/60 bg-[#c5a059]/5 rounded-none'
+              : 'border-[#d4af37]/70 bg-white/[0.02]'
+          }`}>
+            <Compass className={`w-4.5 h-4.5 transition-colors ${
+              isEditorial ? 'text-[#a37a3e]' : isRetro ? 'text-white' : 'text-[#d4af37]'
+            }`} />
           </div>
           <div className="flex flex-col">
-            <h1 className="font-display font-medium text-base tracking-widest text-[#d4af37] uppercase sm:text-lg">
+            <h1 className={`font-medium text-base tracking-widest uppercase sm:text-lg transition-all ${
+              isEditorial ? 'font-serif text-[#a37a3e] font-bold italic' : isRetro ? 'font-mono text-white font-bold' : 'font-display text-[#d4af37]'
+            }`}>
               {websiteTitle}
             </h1>
-            <span className="text-[8.5px] font-mono tracking-[0.2em] text-white/45 uppercase">{websiteSubtitle}</span>
+            <span className={`text-[8.5px] font-mono tracking-[0.2em] uppercase transition-colors ${
+              isEditorial ? 'text-stone-500' : 'text-white/45'
+            }`}>{websiteSubtitle}</span>
           </div>
         </div>
 
         {/* Navigation Elements */}
-        <nav className="hidden md:flex items-center space-x-8 font-mono text-[10px] tracking-widest text-white/50">
-          <a href="#hero-slideshow-container" className="hover:text-white transition-colors uppercase">HOME</a>
-          <a href="#chuyen-di-noi-bat" className="hover:text-white transition-colors uppercase">JOURNEYS</a>
+        <nav className={`hidden md:flex items-center space-x-8 font-mono text-[10px] tracking-widest ${
+          isEditorial ? 'text-stone-500' : 'text-white/50'
+        }`}>
+          <a href="#hero-slideshow-container" className={`transition-colors uppercase ${isEditorial ? 'hover:text-[#a37a3e]' : 'hover:text-white'}`}>HOME</a>
+          <a href="#chuyen-di-noi-bat" className={`transition-colors uppercase ${isEditorial ? 'hover:text-[#a37a3e]' : 'hover:text-white'}`}>JOURNEYS</a>
           {isAdmin && (
-            <a href="#metadata-sync" className="hover:text-white transition-colors uppercase flex items-center gap-1">
+            <a href="#metadata-sync" className={`transition-colors uppercase flex items-center gap-1 ${isEditorial ? 'hover:text-[#a37a3e]' : 'hover:text-white'}`}>
               <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
               CLOUD PERSISTENCE
             </a>
@@ -545,7 +614,7 @@ export default function App() {
               title="Đăng nhập để vào Cài đặt Web"
             >
               <Lock className="w-3 h-3" />
-              <span>ĐĂNG NHẬP ADMIN (CÀI ĐẶT WEB)</span>
+              <span>Mở khóa</span>
             </motion.button>
           )}
         </div>
@@ -553,22 +622,30 @@ export default function App() {
 
       {/* 2. Hero Slideshow Container */}
       <section id="hero-slideshow-container" className="w-full relative">
-        <HeroSlideshow slides={websiteSlides} />
+        <HeroSlideshow slides={websiteSlides} theme={websiteTheme} />
       </section>
 
       {/* 2.5 Cinematic Infinite Marquee Ticker */}
-      <div className="w-full bg-black/85 border-y border-white/5 py-4.5 overflow-hidden relative z-20 backdrop-blur-sm shadow-[0_4px_30px_rgba(0,0,0,0.8)]">
-        <div className="animate-marquee whitespace-nowrap flex items-center gap-16 text-[10px] sm:text-xs font-mono tracking-[0.25em] text-white/40 uppercase select-none">
+      <div className={`w-full border-y py-4.5 overflow-hidden relative z-20 backdrop-blur-sm transition-all duration-500 ${
+        isEditorial
+          ? 'bg-[#f5f2eb]/90 border-stone-200/60 shadow-sm'
+          : isRetro
+          ? 'bg-[#221a15] border-[#c5a059]/15'
+          : 'bg-[#030303]/85 border-white/5 py-4.5 shadow-[0_4px_30px_rgba(0,0,0,0.8)]'
+      }`}>
+        <div className={`animate-marquee whitespace-nowrap flex items-center gap-16 text-[10px] sm:text-xs font-mono tracking-[0.25em] uppercase select-none ${
+          isEditorial ? 'text-stone-600' : isRetro ? 'text-[#e6d5bf]/60' : 'text-white/40'
+        }`}>
           {[...Array(4)].map((_, i) => (
             <div key={i} className="flex items-center gap-16">
               <span className="flex items-center gap-2">✦ KỶ NIỆM GIA ĐÌNH HẠNH PHÚC</span>
-              <span className="text-[#d4af37] flex items-center gap-2">✦ THE TRUONG CLAN CHRONICLES</span>
+              <span className={`flex items-center gap-2 ${accentTextClass}`}>✦ THE TRUONG CLAN CHRONICLES</span>
               <span className="flex items-center gap-2">✦ NHỮNG CUNG ĐƯỜNG HOÀI NIỆM</span>
-              <span className="text-[#d4af37] flex items-center gap-2">✦ FAMILY TRAVEL JOURNAL</span>
+              <span className={`flex items-center gap-2 ${accentTextClass}`}>✦ FAMILY TRAVEL JOURNAL</span>
               <span className="flex items-center gap-2">✦ ĐÀ LẠT SƯƠNG MÙ 2024</span>
-              <span className="text-[#d4af37] flex items-center gap-2">✦ NHA TRANG BIỂN XANH</span>
+              <span className={`flex items-center gap-2 ${accentTextClass}`}>✦ NHA TRANG BIỂN XANH</span>
               <span className="flex items-center gap-2">✦ PHÚ QUỐC NẮNG VÀNG</span>
-              <span className="text-[#d4af37] flex items-center gap-2">✦ BẢO TÀNG KÝ ỨC VĨNH CỬU</span>
+              <span className={`flex items-center gap-2 ${accentTextClass}`}>✦ BẢO TÀNG KÝ ỨC VĨNH CỬU</span>
             </div>
           ))}
         </div>
@@ -592,13 +669,13 @@ export default function App() {
         <section id="chuyen-di-noi-bat" className="space-y-10 scroll-mt-28">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div className="space-y-2">
-              <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[#d4af37]">DIGITAL TREASURES</span>
-              <h2 className="font-display text-3xl md:text-5xl text-white font-medium tracking-tight">
+              <span className={`font-mono text-[9px] uppercase tracking-[0.3em] ${accentTextClass}`}>DIGITAL TREASURES</span>
+              <h2 className={sectionHeadingClass}>
                 Chuyến Đi Nổi Bật
               </h2>
             </div>
             
-            <p className="text-white/40 text-xs md:text-sm font-sans font-light max-w-sm leading-relaxed">
+            <p className={`text-xs md:text-sm max-w-sm leading-relaxed ${subtextClass}`}>
               Những địa điểm lý tưởng, những cung đường hoài niệm và những bức ảnh thô lưu trữ nguyên vẹn ký ức gia đình.
             </p>
           </div>
@@ -615,6 +692,7 @@ export default function App() {
                     onClick={() => {
                       setActiveAlbumId(album.id);
                     }}
+                    theme={websiteTheme}
                   />
                 </div>
               ))}
@@ -628,18 +706,40 @@ export default function App() {
                     }}
                     whileHover={{ scale: 1.01 }}
                     whileTap={{ scale: 0.99 }}
-                    className={`w-[240px] rounded-2xl border flex flex-col items-center justify-center p-8 transition-all duration-300 cursor-pointer text-center ${
-                      activeAlbumId === 'all'
-                        ? 'bg-white/10 border-[#d4af37] text-white'
-                        : 'bg-white/[0.01] border-white/5 hover:border-white/15 text-white/50 hover:text-white'
+                    className={`w-[240px] flex flex-col items-center justify-center p-8 transition-all duration-300 cursor-pointer text-center ${
+                      isEditorial
+                        ? `rounded-2xl border ${
+                            activeAlbumId === 'all'
+                              ? 'bg-stone-100 border-[#a37a3e] text-stone-800'
+                              : 'bg-[#FAF9F6] border-stone-200 text-stone-500 hover:text-stone-700'
+                          }`
+                        : isRetro
+                        ? `rounded-none border-2 ${
+                            activeAlbumId === 'all'
+                              ? 'bg-[#221a15] border-[#c5a059] text-[#e6d5bf] font-mono shadow-[0_4px_16px_rgba(197,160,89,0.2)]'
+                              : 'bg-[#1c1511] border-[#c5a059]/20 text-[#c5a059]/70 hover:border-[#c5a059]/40 font-mono'
+                          }`
+                        : `rounded-2xl border ${
+                            activeAlbumId === 'all'
+                              ? 'bg-[#030303] border-[#d4af37] text-white shadow-[0_4px_24px_rgba(212,175,55,0.25)]'
+                              : 'bg-white/[0.02] border-white/5 hover:border-white/15 text-white/60 hover:text-white'
+                          }`
                     }`}
                   >
-                    <div className="p-4 rounded-full bg-white/[0.04] mb-4 border border-white/10">
-                      <ImageIcon className="w-6 h-6 text-[#d4af37]" />
+                    <div className={`p-4 rounded-full mb-4 border transition-all ${
+                      isEditorial
+                        ? 'bg-stone-50 border-stone-200'
+                        : isRetro
+                        ? 'bg-[#221a15] border-[#c5a059]/20'
+                        : 'bg-white/[0.04] border-white/10'
+                    }`}>
+                      <ImageIcon className={`w-6 h-6 ${accentTextClass}`} />
                     </div>
-                    <span className="font-display text-lg font-medium tracking-tight mb-2">Xem Tất Cả</span>
-                    <span className="font-mono text-[9px] uppercase tracking-widest text-[#d4af37] mb-4 block">18 PHOTOGRAPHS</span>
-                    <span className="text-xs text-white/40 font-light font-sans leading-relaxed">
+                    <span className={`text-lg font-medium tracking-tight mb-2 ${
+                      isEditorial ? 'font-serif font-bold text-stone-800 italic' : 'font-display'
+                    }`}>Xem Tất Cả</span>
+                    <span className={`font-mono text-[9px] uppercase tracking-widest mb-4 block ${accentTextClass}`}>18 PHOTOGRAPHS</span>
+                    <span className={`text-xs font-light leading-relaxed ${subtextClass}`}>
                       Kết hợp tất cả ký ức hành trình vào một lưới khảm duy nhất.
                     </span>
                   </motion.button>
@@ -648,7 +748,9 @@ export default function App() {
             </div>
 
             {/* Subtle Gradient indicators to make scrolling look premium */}
-            <div className="absolute right-0 top-0 bottom-6 w-16 bg-gradient-to-l from-[#030303] to-transparent pointer-events-none" />
+            <div className={`absolute right-0 top-0 bottom-6 w-16 pointer-events-none bg-gradient-to-l to-transparent ${
+              isEditorial ? 'from-[#FAF9F6]' : isRetro ? 'from-[#1c1511]' : 'from-[#030303]'
+            }`} />
           </div>
 
           {/* Local sandbox uploader for quick bypassing of Google Photos APIs verification blocker */}
@@ -693,6 +795,7 @@ export default function App() {
                   }
                   onPhotoClick={handlePhotoClick}
                   onEditAlbum={isAdmin ? () => setIsEditAlbumOpen(true) : undefined}
+                  theme={websiteTheme}
                 />
               </div>
             )}
@@ -719,18 +822,26 @@ export default function App() {
       </main>
 
       {/* 6. High-end "Footer gia đình" (Family Footer) */}
-      <footer className="bg-black/80 border-t border-white/5 py-16 px-6 md:px-16 mt-20">
+      <footer className={`py-16 px-6 md:px-16 mt-20 transition-all duration-500 ${
+        isEditorial
+          ? 'bg-[#f5f2eb] border-t border-stone-200 text-stone-800'
+          : isRetro
+          ? 'bg-[#0c0c0e] border-t border-white/10 text-zinc-300'
+          : 'bg-[#140e0a]/90 border-t border-white/5 text-[#f2e5d9]/45'
+      }`}>
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start justify-between gap-12">
           {/* Logo / details block */}
           <div className="space-y-4 max-w-sm">
             <div className="flex items-center space-x-3">
-              <div className="w-7 h-7 rounded-full border border-[#d4af37]/40 flex items-center justify-center bg-white/[0.01]">
-                <Camera className="w-3.5 h-3.5 text-[#d4af37]" />
+              <div className={`w-7 h-7 rounded-full border flex items-center justify-center bg-white/[0.01] ${accentBorderClass}`}>
+                <Camera className={`w-3.5 h-3.5 ${accentTextClass}`} />
               </div>
-              <span className="font-display font-medium text-sm tracking-widest text-white uppercase">THE TRUONG FAMILY ARCHIVE</span>
+              <span className={`font-display font-medium text-sm tracking-widest uppercase ${
+                isEditorial ? 'font-serif font-black text-stone-800 italic' : 'text-[#f2e5d9]'
+              }`}>THE TRUONG FAMILY ARCHIVE</span>
             </div>
             
-            <p className="text-xs text-white/40 leading-relaxed font-sans font-light">
+            <p className={`text-xs leading-relaxed ${isEditorial ? 'text-stone-600 font-serif italic' : 'text-[#f2e5d9]/45'}`}>
               Lưu giữ những lát cắt thời gian chân thực và quý báu của gia đình. Đề cao thiết kế tối giản, chất lượng hình ảnh Leica mộc mạc và trải nghiệm lưu truyền số hóa tinh tế.
             </p>
           </div>
@@ -738,8 +849,8 @@ export default function App() {
           {/* Quick list specs */}
           <div className="grid grid-cols-2 gap-10">
             <div className="space-y-3">
-              <span className="font-mono text-[9px] uppercase tracking-widest text-[#d4af37] block">ALBUM ARCHIVES</span>
-              <ul className="font-sans text-xs text-white/60 space-y-2 font-light">
+              <span className={`font-mono text-[9px] uppercase tracking-widest block ${accentTextClass}`}>ALBUM ARCHIVES</span>
+              <ul className={`font-sans text-xs space-y-2 font-light ${isEditorial ? 'text-stone-600 font-serif' : 'text-[#f2e5d9]/60'}`}>
                 <li className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer" onClick={() => { setActiveAlbumId('phu-quoc-2025'); setSyncSource('local'); document.getElementById('chuyen-di-noi-bat')?.scrollIntoView({ behavior: 'smooth' }); }}>Phú Quốc Island (2025)</li>
                 <li className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer" onClick={() => { setActiveAlbumId('da-lat-2024'); setSyncSource('local'); document.getElementById('chuyen-di-noi-bat')?.scrollIntoView({ behavior: 'smooth' }); }}>Đà Lạt Highlands (2024)</li>
                 <li className="flex items-center gap-1.5 hover:text-white transition-colors cursor-pointer" onClick={() => { setActiveAlbumId('singapore-2026'); setSyncSource('local'); document.getElementById('chuyen-di-noi-bat')?.scrollIntoView({ behavior: 'smooth' }); }}>Singapore Cityscape (2026)</li>
@@ -747,19 +858,21 @@ export default function App() {
             </div>
 
             <div className="space-y-3">
-              <span className="font-mono text-[9px] uppercase tracking-widest text-[#d4af37] block">FAMILY DETAILS</span>
-              <ul className="font-sans text-xs text-white/40 space-y-1 font-light leading-relaxed">
-                <li><strong className="text-white/60 font-normal">Sáng lập:</strong> Trương Thịnh</li>
-                <li><strong className="text-white/60 font-normal">Máy ảnh chính:</strong> Leica M11 & SL2</li>
-                <li><strong className="text-white/60 font-normal">Kỷ niệm:</strong> Khởi tạo từ 2024</li>
-                <li><strong className="text-white/60 font-normal">Kỹ thuật:</strong> React, Framer Motion</li>
+              <span className={`font-mono text-[9px] uppercase tracking-widest block ${accentTextClass}`}>FAMILY DETAILS</span>
+              <ul className={`font-sans text-xs space-y-1 font-light leading-relaxed ${isEditorial ? 'text-stone-600 font-serif' : 'text-[#f2e5d9]/45'}`}>
+                <li><strong className={`${isEditorial ? 'text-stone-850 font-bold' : 'text-[#f2e5d9]/60'} font-normal`}>Sáng lập:</strong> Trương Thịnh</li>
+                <li><strong className={`${isEditorial ? 'text-stone-850 font-bold' : 'text-[#f2e5d9]/60'} font-normal`}>Máy ảnh chính:</strong> Leica M11 & SL2</li>
+                <li><strong className={`${isEditorial ? 'text-stone-850 font-bold' : 'text-[#f2e5d9]/60'} font-normal`}>Kỷ niệm:</strong> Khởi tạo từ 2024</li>
+                <li><strong className={`${isEditorial ? 'text-stone-850 font-bold' : 'text-[#f2e5d9]/60'} font-normal`}>Kỹ thuật:</strong> React, Framer Motion</li>
               </ul>
             </div>
           </div>
         </div>
 
         {/* Floating line bottom credits */}
-        <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between text-[10px] font-mono text-white/30 tracking-widest gap-4">
+        <div className={`max-w-7xl mx-auto mt-16 pt-8 border-t flex flex-col sm:flex-row items-center justify-between text-[10px] font-mono tracking-widest gap-4 ${
+          isEditorial ? 'border-stone-200 text-stone-500' : 'border-white/5 text-white/30'
+        }`}>
           <span>DESIGNED BY APPLE VISUAL INSPIRED ARTISANS</span>
           <div className="flex items-center space-x-4">
             <span>© 2026 THE TRUONG CLAN CHRONICLES. ALL RIGHTS RESERVED.</span>
@@ -773,10 +886,12 @@ export default function App() {
                   setPasscodePromptOpen(true);
                 }
               }}
-              className="hover:text-[#d4af37] transition-all cursor-pointer text-white/40 hover:scale-105 flex items-center gap-1.5 focus:outline-none text-[10px] uppercase font-mono tracking-widest border-l border-white/10 pl-3.5"
+              className={`hover:text-[#d4af37] transition-all cursor-pointer text-white/40 hover:scale-105 flex items-center gap-1.5 focus:outline-none text-[10px] uppercase font-mono tracking-widest border-l border-white/10 pl-3.5 ${
+                isEditorial ? 'border-stone-250 text-stone-600 hover:text-[#a37a3e]' : ''
+              }`}
               title={isAdmin ? "Khóa quyền quản trị (Thoát Admin)" : "Đăng nhập mật mã để thay đổi giao diện"}
             >
-              {isAdmin ? <Unlock className="w-3.2 h-3.2 text-green-400" /> : <Lock className="w-3.2 h-3.2 text-[#d4af37]" />}
+              {isAdmin ? <Unlock className="w-3.2 h-3.2 text-green-400" /> : <Lock className={`w-3.2 h-3.2 ${accentTextClass}`} />}
               <span>{isAdmin ? "CÀI ĐẶT WEB (ẤN ĐỂ THOÁT)" : "CÀI ĐẶT WEB (ĐĂNG NHẬP)"}</span>
             </button>
           </div>
@@ -801,6 +916,7 @@ export default function App() {
           currentSubtitle={websiteSubtitle}
           currentSlides={websiteSlides}
           currentPasscode={adminPasscode}
+          currentTheme={websiteTheme}
           onLockAdmin={() => {
             setIsAdmin(false);
             localStorage.removeItem('is_family_admin_unlocked');

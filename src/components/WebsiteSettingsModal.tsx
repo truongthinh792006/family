@@ -25,6 +25,7 @@ interface WebsiteSettingsModalProps {
   currentSubtitle: string;
   currentSlides: HeroSlide[];
   currentPasscode: string;
+  currentTheme?: string;
   onLockAdmin?: () => void;
 }
 
@@ -35,11 +36,13 @@ export default function WebsiteSettingsModal({
   currentSubtitle,
   currentSlides,
   currentPasscode,
+  currentTheme = 'cinematic',
   onLockAdmin,
 }: WebsiteSettingsModalProps) {
   const [title, setTitle] = useState(currentTitle);
   const [subtitle, setSubtitle] = useState(currentSubtitle);
   const [passcode, setPasscode] = useState(currentPasscode);
+  const [theme, setTheme] = useState(currentTheme);
   const [showPhotoGuide, setShowPhotoGuide] = useState(false);
   
   // Initialize with exactly 3 slides, falling back if empty
@@ -107,6 +110,7 @@ export default function WebsiteSettingsModal({
         subtitle: subtitle.trim(),
         heroSlides: slides,
         passcode: passcode.trim(),
+        theme: theme,
         lastUpdated: new Date().toISOString(),
       });
 
@@ -382,10 +386,85 @@ export default function WebsiteSettingsModal({
               </div>
             </div>
 
-            {/* Part 3: Dynamic Admin Passcode settings */}
+            {/* Part 3: Select Display Theme */}
             <div className="space-y-4 pt-4 border-t border-white/5">
               <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#d4af37] block font-semibold">
-                3. BẢO MẬT & MẬT MÃ QUẢN TRỊ (ADMIN PASSCODE)
+                3. GIAO DIỆN HIỂN THỊ CHÍNH (THEME DESIGN)
+              </span>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {/* Theme 1 option card */}
+                <button
+                  type="button"
+                  onClick={() => setTheme('cinematic')}
+                  className={`p-4 rounded-xl border text-left cursor-pointer transition-all ${
+                    theme === 'cinematic'
+                      ? 'bg-[#d4af37]/10 border-[#d4af37] shadow-[0_0_15px_rgba(212,175,55,0.15)]'
+                      : 'bg-white/[0.01] border-white/5 hover:bg-white/[0.03] hover:border-white/10'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-sans font-medium text-[10px] text-white/50">GIAO DIỆN 1</span>
+                    {theme === 'cinematic' && (
+                      <span className="text-[8px] font-mono bg-[#d4af37]/20 text-[#d4af37] px-1.5 py-0.5 rounded-full font-semibold">BẬT</span>
+                    )}
+                  </div>
+                  <h5 className="text-xs font-bold text-white uppercase tracking-wider">ĐIỆN ẢNH SANG TRỌNG</h5>
+                  <p className="text-[10px] text-white/40 mt-1 leading-relaxed">
+                    Tông đen sâu, điểm vàng kim sang trọng, tỷ lệ khung hình điện ảnh tinh xảo.
+                  </p>
+                </button>
+
+                {/* Theme 2 option card */}
+                <button
+                  type="button"
+                  onClick={() => setTheme('editorial_warm')}
+                  className={`p-4 rounded-xl border text-left cursor-pointer transition-all ${
+                    theme === 'editorial_warm'
+                      ? 'bg-[#a37a3e]/10 border-[#a37a3e] shadow-[0_0_15px_rgba(163,122,62,0.15)]'
+                      : 'bg-white/[0.01] border-white/5 hover:bg-white/[0.03] hover:border-white/10'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-sans font-medium text-[10px] text-white/50">GIAO DIỆN 2</span>
+                    {theme === 'editorial_warm' && (
+                      <span className="text-[8px] font-mono bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded-full font-semibold">BẬT</span>
+                    )}
+                  </div>
+                  <h5 className="text-xs font-bold text-white uppercase tracking-wider">TẠP CHÍ ẤM ÁP</h5>
+                  <p className="text-[10px] text-white/40 mt-1 leading-relaxed">
+                    Tông ngà ấm ngút ngàn, chữ Serif báo chí cổ điển, êm ái như cuốn album giấy.
+                  </p>
+                </button>
+
+                {/* Theme 3 option card */}
+                <button
+                  type="button"
+                  onClick={() => setTheme('retro_mono')}
+                  className={`p-4 rounded-xl border text-left cursor-pointer transition-all ${
+                    theme === 'retro_mono'
+                      ? 'bg-[#c5a059]/10 border-[#c5a059] shadow-[0_0_15px_rgba(197,160,89,0.15)]'
+                      : 'bg-white/[0.01] border-white/5 hover:bg-white/[0.03] hover:border-white/10'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-sans font-medium text-[10px] text-white/50">GIAO DIỆN 3</span>
+                    {theme === 'retro_mono' && (
+                      <span className="text-[8px] font-mono bg-[#c5a059]/20 text-[#c5a059] px-1.5 py-0.5 rounded-full font-semibold">BẬT</span>
+                    )}
+                  </div>
+                  <h5 className="text-xs font-mono text-white uppercase tracking-wider">ẢNH CŨ HOÀI NIỆM</h5>
+                  <p className="text-[10px] text-white/40 mt-1 leading-relaxed">
+                    Tông màu giấy ảnh cổ ấm áp, bộ lọc sepia và hiệu ứng xước nhẹ vintage xưa cũ chân thực.
+                  </p>
+                </button>
+              </div>
+            </div>
+
+            {/* Part 4: Dynamic Admin Passcode settings */}
+            <div className="space-y-4 pt-4 border-t border-white/5">
+              <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#d4af37] block font-semibold">
+                4. BẢO MẬT & MẬT MÃ QUẢN TRỊ (ADMIN PASSCODE)
               </span>
 
               <div className="p-5 rounded-2xl bg-white/[0.01] border border-white/5 space-y-4">
