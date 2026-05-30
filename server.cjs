@@ -131,6 +131,31 @@ async function startServer() {
     if (!url || typeof url !== "string") {
       return res.status(400).json({ error: "Y\xEAu c\u1EA7u cung c\u1EA5p \u0111\u01B0\u1EDDng d\u1EABn li\xEAn k\u1EBFt c\u1EE7a Album Google Photos." });
     }
+    const cleanUrl = url.trim();
+    if (cleanUrl.includes("googleusercontent.com") || cleanUrl.includes("photos.fife") || cleanUrl.includes("lh3.google.com")) {
+      if (cleanUrl.includes("/pw/") || cleanUrl.includes("=w") || cleanUrl.includes("=s") || cleanUrl.includes("?authuser") || cleanUrl.includes("-no")) {
+        const baseUrl = cleanUrl.split("=")[0];
+        const singlePhoto = {
+          id: `gp-single-${Date.now()}`,
+          url: `${baseUrl}=w1200-h800`,
+          thumbnailUrl: `${baseUrl}=w600-h400-c`,
+          type: "image",
+          title: "\u1EA2nh t\u1EEB Google Photos Link",
+          location: "Khung \u1EA3nh \u0110\xE1m m\xE2y",
+          year: (/* @__PURE__ */ new Date()).getFullYear(),
+          description: "H\xECnh \u1EA3nh \u0111\u01A1n li\xEAn k\u1EBFt tr\u1EF1c ti\u1EBFp t\u1EEB Google Photos."
+        };
+        return res.json({
+          id: `gp-album-single-${Date.now()}`,
+          name: "\u1EA2nh \u0110\u01A1n Google Photos",
+          year: (/* @__PURE__ */ new Date()).getFullYear(),
+          coverUrl: `${baseUrl}=w600-h400-c`,
+          photosCount: 1,
+          description: "Album t\u1EF1 \u0111\u1ED9ng kh\u1EDFi t\u1EA1o t\u1EEB li\xEAn k\u1EBFt h\xECnh \u1EA3nh tr\u1EF1c ti\u1EBFp c\u1EE7a b\u1EA1n.",
+          photos: [singlePhoto]
+        });
+      }
+    }
     try {
       const response = await fetch(url, {
         headers: {
@@ -228,6 +253,36 @@ async function startServer() {
     } catch (err) {
       console.error("Fetch shared album issue:", err);
       return res.status(500).json({ error: "C\xF3 l\u1ED7i x\u1EA3y ra khi \u0111\u1ED3ng b\u1ED9 h\xECnh \u1EA3nh: " + err.message });
+    }
+  });
+  app.get("/api/proxy/image", async (req, res) => {
+    const { url } = req.query;
+    if (!url || typeof url !== "string") {
+      return res.status(400).send("Y\xEAu c\u1EA7u cung c\u1EA5p tham s\u1ED1 url.");
+    }
+    try {
+      const decodedUrl = decodeURIComponent(url);
+      if (!decodedUrl.includes("googleusercontent.com") && !decodedUrl.includes("photos.fife") && !decodedUrl.includes("google.com")) {
+        return res.status(403).send("Ch\u1EC9 \u0111\u01B0\u1EE3c ph\xE9p proxy c\xE1c mi\u1EC1n c\u1EE7a Google Photos.");
+      }
+      const response = await fetch(decodedUrl, {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+      });
+      if (!response.ok) {
+        console.error(`Unable to proxy image from ${decodedUrl}: status ${response.status}`);
+        return res.status(response.status).send(`Failed to stream image ${response.status}`);
+      }
+      const contentType = response.headers.get("content-type") || "image/jpeg";
+      res.setHeader("Content-Type", contentType);
+      res.setHeader("Cache-Control", "public, max-age=86400");
+      const arrayBuffer = await response.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      return res.send(buffer);
+    } catch (err) {
+      console.error("Proxy endpoint issue:", err);
+      return res.status(500).send("C\xF3 l\u1ED7i x\u1EA3y ra tr\xEAn m\xE1y ch\u1EE7 khi proxy h\xECnh \u1EA3nh: " + err.message);
     }
   });
   if (process.env.NODE_ENV !== "production") {
